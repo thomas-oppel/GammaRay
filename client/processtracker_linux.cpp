@@ -33,7 +33,10 @@
 
 #include <QFile>
 #include <QStringList>
-#ifndef GAMMARAY_QT6_TODO
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QStringDecoder>
+#else
 #include <QTextCodec>
 #endif
 
@@ -52,15 +55,15 @@ static QString readFile(const QString &filePath, const QByteArray &codec = QByte
         return QString();
     }
 
-#ifndef GAMMARAY_QT6_TODO
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    return QStringDecoder(codec).decode(file.readAll());
+#else
     QTextCodec *tc = QTextCodec::codecForName(codec);
     if (!tc) {
         tc = QTextCodec::codecForLocale();
     }
 
     return tc->toUnicode(file.readAll());
-#else
-    return QString::fromUtf8(file.readAll());
 #endif
 }
 }
