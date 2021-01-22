@@ -241,8 +241,7 @@ void PropertyEditorDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     textRect = textRect.adjusted(textHMargin, textVMargin, -textHMargin, -textVMargin);
 
     static const int parenthesisLineWidth = 1;
-#ifndef GAMMARAY_QT6_TODO
-    const int matrixSpacing = opt.fontMetrics.width(QStringLiteral("x"));
+    const int matrixSpacing = opt.fontMetrics.boundingRect(QStringLiteral("x")).width();
     const int matrixHMargin = matrixSpacing / 2;
     const int parenthesisWidth = qMax(matrixHMargin, 3);
 
@@ -275,7 +274,6 @@ void PropertyEditorDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     painter->drawLine(xOffset, textRect.height() - 1, xOffset - parenthesisWidth,
                       textRect.height() - 1);
     painter->restore();
-#endif
 }
 
 template<typename Matrix>
@@ -294,10 +292,8 @@ QSize PropertyEditorDelegate::sizeHint(const QStyleOptionViewItem &option, const
     for (int col = 0; col < matrix_trait<Matrix>::columns; ++col) {
         width += columnWidth(opt, matrix, col);
     }
-#ifndef GAMMARAY_QT6_TODO
-    width += opt.fontMetrics.width(QStringLiteral("x")) * matrix_trait<Matrix>::columns + 2
+    width += opt.fontMetrics.boundingRect(QStringLiteral("x")).width() * matrix_trait<Matrix>::columns + 2
              * parenthesisLineWidth + 2 * textHMargin;
-#endif
 
     const int height = opt.fontMetrics.lineSpacing() * matrix_trait<Matrix>::rows + 2* textVMargin;
 
@@ -308,17 +304,13 @@ template<typename Matrix>
 int PropertyEditorDelegate::columnWidth(const QStyleOptionViewItem &option, const Matrix &matrix,
                                         int column) const
 {
-#ifndef GAMMARAY_QT6_TODO
     int width = 0;
     for (int row = 0; row < matrix_trait<Matrix>::rows; ++row) {
         width = qMax(width,
-                     option.fontMetrics.width(
-                         QString::number(matrix_trait<Matrix>::value(matrix, row, column))));
+                     option.fontMetrics.boundingRect(
+                         QString::number(matrix_trait<Matrix>::value(matrix, row, column))).width());
     }
     return width;
-#else
-    return 42;
-#endif
 }
 
 bool PropertyEditorDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)

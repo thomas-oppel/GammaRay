@@ -55,8 +55,7 @@ void TrailingColorLabel::paintEvent(QPaintEvent *event)
     const int margin = 5;
     const int squaresize = 20;
     const int height = 30;
-#ifndef GAMMARAY_QT6_TODO
-    const int numberGroupWidth = metrics.width(QStringLiteral("  000"));
+    const int numberGroupWidth = metrics.boundingRect(QStringLiteral("  000")).width();
     const int width = margin + squaresize + margin + 4 * numberGroupWidth + margin;
     setMinimumSize(QSize(width + 1, height + 1));
 
@@ -83,7 +82,6 @@ void TrailingColorLabel::paintEvent(QPaintEvent *event)
     p->drawText(QRect(margin + squaresize + margin + 3 * numberGroupWidth, 0, numberGroupWidth, height),
                 Qt::AlignVCenter | Qt::AlignRight,
                 QString::number(qAlpha(m_pickedColor)));
-#endif
     { // Color bg-pattern
     QBrush brush;
     QPixmap bgPattern(squaresize, squaresize);

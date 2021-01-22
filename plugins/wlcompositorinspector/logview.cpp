@@ -76,10 +76,9 @@ public:
 
   void drawLinePartialSelected(QPainter &painter, const QRect &rect, const QStaticText &line, int startSelectChar, int endSelectChar)
   {
-#ifndef GAMMARAY_QT6_TODO
     const QString &text = line.text();
-    int startX = m_metrics.width(text.left(startSelectChar));
-    int endX = m_metrics.width(text.left(endSelectChar));
+    const int startX = m_metrics.boundingRect(text.left(startSelectChar)).width();
+    const int endX = m_metrics.boundingRect(text.left(endSelectChar)).width();
 
     if (startSelectChar > 0) {
       painter.drawText(QRect(rect.x(), rect.y(), startX,  rect.height()), Qt::TextDontClip, text.left(startSelectChar));
@@ -92,9 +91,8 @@ public:
 
     if (endSelectChar < text.count()) {
       painter.setPen(palette().color(QPalette::Text));
-      painter.drawText(QRect(rect.x() + endX, rect.y(), m_metrics.width(text) - endX, rect.height()), text.mid(endSelectChar));
+      painter.drawText(QRect(rect.x() + endX, rect.y(), m_metrics.boundingRect(text).width() - endX, rect.height()), text.mid(endSelectChar));
     }
-#endif
   }
 
   void selectionBoundaries(QPoint &start, QPoint &end) const

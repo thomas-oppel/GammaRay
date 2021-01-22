@@ -740,13 +740,12 @@ void RemoteViewWidget::drawFPS(QPainter *p)
     const int barWidth = 20;
 
     QString fps = QString::number(m_fps, 'g', 3) + " fps";
-#ifndef GAMMARAY_QT6_TODO
-    const QRect textrect(width()  - vRulerWidth  - metrics.width(fps) - 5,
+
+    const QRect textrect(width()  - vRulerWidth  - metrics.boundingRect(fps).width() - 5,
                          height() - hRulerHeight - metrics.height()   - 5,
-                         metrics.width(fps) + 2,
+                         metrics.boundingRect(fps).width() + 2,
                          metrics.height()   + 2);
     p->drawText(textrect, Qt::AlignRight, fps);
-#endif
 
     p->setBrush(QBrush(QColor(51, 51, 51, 170)));
     p->setPen(Qt::NoPen);
@@ -760,12 +759,8 @@ void RemoteViewWidget::drawFPS(QPainter *p)
 
 int RemoteViewWidget::viewTickLabelDistance() const
 {
-#ifndef GAMMARAY_QT6_TODO
     const auto maxLabel = std::max(m_frame.viewRect().width(), m_frame.viewRect().height());
-    return 2 * fontMetrics().width(QString::number(maxLabel));
-#else
-    return 42;
-#endif
+    return 2 * fontMetrics().boundingRect(QString::number(maxLabel)).width();
 }
 
 int RemoteViewWidget::sourceTickLabelDistance(int viewDistance)
@@ -860,18 +855,16 @@ void RemoteViewWidget::drawMeasurementLabel(QPainter *p, QPoint pos, QPoint dir,
     p->save();
     static const auto margin = 2;
     const auto height = fontMetrics().height() + (2 * margin);
-#ifndef GAMMARAY_QT6_TODO
-    const auto width = fontMetrics().width(text) + (2 * margin);
+    const auto width = fontMetrics().boundingRect(text).width() + (2 * margin);
 
     QRect r(pos.x(), pos.y(), width * dir.x(), height * dir.y());
     r = r.normalized();
     r = r.translated(dir * 5);
 
     p->setPen(palette().color(QPalette::Text));
-    p->setBrush(palette().background());
+    p->setBrush(palette().window());
     p->drawRect(r);
     p->drawText(r, Qt::AlignCenter, text);
-#endif
     p->restore();
 }
 
@@ -1341,11 +1334,7 @@ int RemoteViewWidget::contentHeight() const
 
 int RemoteViewWidget::verticalRulerWidth() const
 {
-#ifndef GAMMARAY_QT6_TODO
-    return fontMetrics().width(QString::number(m_frame.sceneRect().height())) + 24; // 2* tick length + some margin
-#else
-    return 42;
-#endif
+    return fontMetrics().boundingRect(QString::number(m_frame.sceneRect().height())).width() + 24; // 2* tick length + some margin
 }
 
 int RemoteViewWidget::horizontalRulerHeight() const

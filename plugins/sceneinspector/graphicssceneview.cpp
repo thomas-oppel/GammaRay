@@ -38,10 +38,8 @@ GraphicsSceneView::GraphicsSceneView(QWidget *parent)
     ui->setupUi(this);
 
     QFontMetrics fm(ui->sceneCoordLabel->font());
-#ifndef GAMMARAY_QT6_TODO
-    ui->sceneCoordLabel->setFixedWidth(fm.width(QStringLiteral("00000.00 x 00000.00")));
-    ui->itemCoordLabel->setFixedWidth(fm.width(QStringLiteral("00000.00 x 00000.00")));
-#endif
+    ui->sceneCoordLabel->setFixedWidth(fm.boundingRect(QStringLiteral("00000.00 x 00000.00")).width());
+    ui->itemCoordLabel->setFixedWidth(fm.boundingRect(QStringLiteral("00000.00 x 00000.00")).width());
 
     connect(ui->graphicsView, &GraphicsView::sceneCoordinatesChanged,
             this, &GraphicsSceneView::sceneCoordinatesChanged);
