@@ -73,8 +73,6 @@ void WidgetPaintAnalyzerExtension::analyze()
         return;
     m_paintAnalyzer->beginAnalyzePainting();
     m_paintAnalyzer->setBoundingRect(m_widget->rect());
-#ifndef GAMMARAY_QT6_TODO
-    m_widget->render(m_paintAnalyzer->paintDevice(), QPoint(), QRegion(), nullptr);
-#endif
+    m_widget->render(m_paintAnalyzer->paintDevice(), QPoint(), QRegion(), {});
     m_paintAnalyzer->endAnalyzePainting();
 }
