@@ -204,15 +204,13 @@ public:
     int lineX = 0;
 
     const QString &text = m_lines.at(line).text.text();
-#ifndef GAMMARAY_QT6_TODO
     for (int x = 0, i = 0; i < text.count(); ++i) {
       const QChar &c = text.at(i);
       if (p.x() >= x) {
         lineX = i;
       }
-      x += m_metrics.width(c);
+      x += m_metrics.boundingRect(c).width();
     }
-#endif
 
     return {lineX, line};
   }
